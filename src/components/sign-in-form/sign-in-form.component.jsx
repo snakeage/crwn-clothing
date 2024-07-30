@@ -94,10 +94,11 @@
 import { useState } from 'react';
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
+
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
-  SignInAuthUserWithEmailAndPassword,
+  signInAuthUserWithEmailAndPassword,
 } from '../../utils/firebase/firebase.utils';
 import './sign-in-form.styles.scss';
 
@@ -119,8 +120,7 @@ const SignInForm = () => {
     if (isSigningIn) return;
     setIsSigningIn(true);
     try {
-      const { user } = await signInWithGooglePopup();
-      await createUserDocumentFromAuth(user);
+      await signInWithGooglePopup();
     } catch (error) {
       console.error('Error signing in with Google', error);
     } finally {
@@ -132,11 +132,11 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-      const { user } = await SignInAuthUserWithEmailAndPassword(
+      const { user } = await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
-      console.log(user);
+
       resetFormFields();
     } catch (error) {
       switch (error.code) {
